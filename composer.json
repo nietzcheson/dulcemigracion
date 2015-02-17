@@ -2,6 +2,7 @@
   "autoload": {
     "psr-4": {
       "Query\\": "query/",
+      "SQL\\": "sql",
       "App\\": "app"
     }
   }
