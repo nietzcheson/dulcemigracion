@@ -20,27 +20,26 @@ class queryFK
 
   public function createFK($tabla, $cell, $tablaFK, $cellFK)
   {
-
     try
     {
-      $fk = $this->db->query(
-      "select c.COLUMN_NAME
-      from INFORMATION_SCHEMA.TABLE_CONSTRAINTS pk ,
-      INFORMATION_SCHEMA.KEY_COLUMN_USAGE c
-      where pk.TABLE_NAME = '$tabla'
-      and CONSTRAINT_TYPE = 'PRIMARY KEY'
-      and c.TABLE_NAME = pk.TABLE_NAME
-      and c.CONSTRAINT_NAME = pk.CONSTRAINT_NAME")
-      ->fetchAll();
-
-      $columnName = $fk[0]["COLUMN_NAME"];
+      // $fk = $this->db->query(
+      // "select c.COLUMN_NAME
+      // from INFORMATION_SCHEMA.TABLE_CONSTRAINTS pk ,
+      // INFORMATION_SCHEMA.KEY_COLUMN_USAGE c
+      // where pk.TABLE_NAME = '$tabla'
+      // and CONSTRAINT_TYPE = 'PRIMARY KEY'
+      // and c.TABLE_NAME = pk.TABLE_NAME
+      // and c.CONSTRAINT_NAME = pk.CONSTRAINT_NAME")
+      // ->fetchAll();
+      //
+      // $columnName = $fk[3]["COLUMN_NAME"];
 
       $this->db->query("SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0");
       $this->db->query("SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0");
       $this->db->query("SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES'");
 
       $this->db->query("ALTER TABLE $this->dbname.$tabla
-      ADD COLUMN $cell INT(11) NOT NULL AFTER $columnName,
+      ADD COLUMN $cell INT(11) NOT NULL,
       ADD INDEX $tabla.$tablaFK ($cell ASC)");
 
       $this->db->query("ALTER TABLE $this->dbname.$tabla

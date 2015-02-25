@@ -13,9 +13,9 @@ class database extends \PDO
   public function __construct(){
     $this->engine = 'mysql';
     $this->host = 'localhost';
-    $this->database = 'sisfc';
-    $this->user = 'sisfc';
-    $this->pass = 'sisfc';
+    $this->database = '5is3C';
+    $this->user = '5is3C';
+    $this->pass = '5is3C';
     $dns = $this->engine.':dbname='.$this->database.";host=".$this->host;
     parent::__construct( $dns, $this->user, $this->pass );
   }

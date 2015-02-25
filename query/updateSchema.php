@@ -14,36 +14,18 @@ class updateSchema
     $this->db = new database();
   }
 
-  public function updateSchemaToFKey($tabla_update, $tabla_extraer = false, $col_old, $fk)
-    {
-      $this->_table[] = array(
-        "tabla_actualizar" => $tabla_update,
-        "tabla_extraer" => array(
-          'tabla' => $tabla_extraer["tabla"],
-          'col' => $tabla_extraer["tabla"]
-        ),
-        'col_old' => $col_old,
-        'fk' => $fk
-      );
+  public function updateSchemaToFKey($tablaUpdate, $tablaFK)
+  {
+    $query = $this->db->query("SELECT ".$tablaUpdate["id"].",".$tablaUpdate["from"]." FROM ".$tablaUpdate["name"]." ")->fetchAll();
 
-      $consulta = $this->db->query("SELECT * FROM $tabla_update")->fetchAll();
+    for($i=0;$i<count($query);$i++){
+      $fk = $this->db->query("SELECT * FROM ".$tablaFK["name"]." WHERE ".$tablaFK["from"]."='".$query[$i][$tablaUpdate["from"]]."' ")->fetch();
 
-      for($i=0; $i<count($consulta); $i++){
+      $key = ($fk[$tablaFK["fk"]]!=0) ? $fk[$tablaFK["fk"]] : 0;
 
-        $id_consulta = (int) $consulta[$i][$col_old];
-
-        if($tabla_extraer !=false){
-          $fetch = $this->db->query("SELECT * FROM ".$tabla_extraer['tabla']." WHERE ".$tabla_extraer['col']."='".$consulta[$i][$col_old]."'")->fetch();
-          $id_consulta = ($fetch["id"] !=null || $fetch["id"] !="") ? $fetch["id"] = (int) $fetch["id"] : $fetch["id"] = 0;
-        }
-
-        if($id_consulta!=0){
-          $this->db->query("UPDATE $tabla_update SET $fk='$id_consulta' WHERE $col_old='".$consulta[$i][$col_old]."'");
-        }
-
-      }
-
+      $this->db->query("UPDATE ".$tablaUpdate["name"]." SET ".$tablaUpdate["to"]."='$key' WHERE ".$tablaUpdate["id"]."='".$query[$i][$tablaUpdate["id"]]."'");
     }
+  }
 }
 
 
